@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using TMPro;
 using UnityEngine.Audio;
 using GeoGame.Localization;
+using UnityEngine.InputSystem;
 
 public class SettingsMenu : Menu
 {
@@ -34,6 +35,10 @@ public class SettingsMenu : Menu
 	public TabGroup tabGroup;
 	public Button applyButton;
 
+	[Header("Controller Navigation")]
+	[SerializeField] private Selectable firstSelectedElement;
+	private Selectable currentSelectedElement;
+
 	// Private stuff
 	Dictionary<Vector2Int, List<Vector2Int>> supportedResolutions;
 	Settings lastAppliedSettings;
@@ -42,6 +47,10 @@ public class SettingsMenu : Menu
 	protected override void Awake()
 	{
 		base.Awake();
+		if (firstSelectedElement == null)
+		{
+			firstSelectedElement = tabGroup.GetComponent<Selectable>();
+		}
 	}
 
 	void Start()
@@ -316,6 +325,13 @@ public class SettingsMenu : Menu
 			lastAppliedSettings = Settings.LoadSavedSettings();
 			RebindManager.Instance.OnSettingsOpened();
 			SetUIFromSettings(lastAppliedSettings);
+			
+			// Set initial selection
+			if (firstSelectedElement != null)
+			{
+				firstSelectedElement.Select();
+				currentSelectedElement = firstSelectedElement;
+			}
 		}
 	}
 
@@ -358,7 +374,60 @@ public class SettingsMenu : Menu
 		}
 	}
 
+	void Update()
+	{
+		if (!IsOpen) return;
 
+		// Handle controller navigation
+		var gamepad = Gamepad.current;
+		if (gamepad != null)
+		{
+			// Handle tab navigation
+			if (gamepad.dpad.left.wasPressedThisFrame || gamepad.dpad.right.wasPressedThisFrame)
+			{
+				int currentTab = tabGroup.currentTabIndex;
+				int newTab = currentTab + (gamepad.dpad.left.wasPressedThisFrame ? -1 : 1);
+				if (newTab >= 0 && newTab < tabGroup.tabs.Length)
+				{
+					tabGroup.ShowTab(newTab);
+				}
+			}
+
+			// Handle value wheel navigation
+			if (currentSelectedElement != null)
+			{
+				var valueWheel = currentSelectedElement.GetComponent<ValueWheel>();
+				if (valueWheel != null)
+				{
+					if (gamepad.dpad.left.wasPressedThisFrame)
+					{
+						valueWheel.SetActiveIndex(valueWheel.activeValueIndex - 1);
+					}
+					else if (gamepad.dpad.right.wasPressedThisFrame)
+					{
+						valueWheel.SetActiveIndex(valueWheel.activeValueIndex + 1);
+					}
+				}
+
+				// Handle slider navigation
+				var slider = currentSelectedElement.GetComponent<Slider>();
+				if (slider != null)
+				{
+					float delta = gamepad.leftStick.x.ReadValue() * Time.deltaTime;
+					if (Mathf.Abs(delta) > 0.1f)
+					{
+						slider.value = Mathf.Clamp(slider.value + delta, slider.minValue, slider.maxValue);
+					}
+				}
+			}
+
+			// Handle apply button
+			if (gamepad.buttonSouth.wasPressedThisFrame)
+			{
+				ApplyCurrentSettings();
+			}
+		}
+	}
 
 }
 

@@ -80,6 +80,24 @@ public partial class @PlayerAction: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""RudderLeft"",
+                    ""type"": ""Button"",
+                    ""id"": ""325e683d-37d2-4b21-88b0-1aeccf398cdb"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""RudderRight"",
+                    ""type"": ""Button"",
+                    ""id"": ""a4c05fe0-0735-441a-bb6a-0bd0d085bc73"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -278,6 +296,28 @@ public partial class @PlayerAction: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": ""Keyboard"",
                     ""action"": ""Make Nighttime"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""03d4f512-9934-48a8-8752-9025fb79dfe2"",
+                    ""path"": ""<Gamepad>/leftShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""RudderLeft"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ceed1296-bb75-408a-87c6-c238af0017a1"",
+                    ""path"": ""<Gamepad>/rightShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""RudderRight"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -653,6 +693,8 @@ public partial class @PlayerAction: IInputActionCollection2, IDisposable
         m_PlayerControls_Boost = m_PlayerControls.FindAction("Boost", throwIfNotFound: true);
         m_PlayerControls_MakeDaytime = m_PlayerControls.FindAction("Make Daytime", throwIfNotFound: true);
         m_PlayerControls_MakeNighttime = m_PlayerControls.FindAction("Make Nighttime", throwIfNotFound: true);
+        m_PlayerControls_RudderLeft = m_PlayerControls.FindAction("RudderLeft", throwIfNotFound: true);
+        m_PlayerControls_RudderRight = m_PlayerControls.FindAction("RudderRight", throwIfNotFound: true);
         // Camera Controls
         m_CameraControls = asset.FindActionMap("Camera Controls", throwIfNotFound: true);
         m_CameraControls_ForwardCameraView = m_CameraControls.FindAction("Forward Camera View", throwIfNotFound: true);
@@ -743,6 +785,8 @@ public partial class @PlayerAction: IInputActionCollection2, IDisposable
     private readonly InputAction m_PlayerControls_Boost;
     private readonly InputAction m_PlayerControls_MakeDaytime;
     private readonly InputAction m_PlayerControls_MakeNighttime;
+    private readonly InputAction m_PlayerControls_RudderLeft;
+    private readonly InputAction m_PlayerControls_RudderRight;
     public struct PlayerControlsActions
     {
         private @PlayerAction m_Wrapper;
@@ -753,6 +797,8 @@ public partial class @PlayerAction: IInputActionCollection2, IDisposable
         public InputAction @Boost => m_Wrapper.m_PlayerControls_Boost;
         public InputAction @MakeDaytime => m_Wrapper.m_PlayerControls_MakeDaytime;
         public InputAction @MakeNighttime => m_Wrapper.m_PlayerControls_MakeNighttime;
+        public InputAction @RudderLeft => m_Wrapper.m_PlayerControls_RudderLeft;
+        public InputAction @RudderRight => m_Wrapper.m_PlayerControls_RudderRight;
         public InputActionMap Get() { return m_Wrapper.m_PlayerControls; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -780,6 +826,12 @@ public partial class @PlayerAction: IInputActionCollection2, IDisposable
             @MakeNighttime.started += instance.OnMakeNighttime;
             @MakeNighttime.performed += instance.OnMakeNighttime;
             @MakeNighttime.canceled += instance.OnMakeNighttime;
+            @RudderLeft.started += instance.OnRudderLeft;
+            @RudderLeft.performed += instance.OnRudderLeft;
+            @RudderLeft.canceled += instance.OnRudderLeft;
+            @RudderRight.started += instance.OnRudderRight;
+            @RudderRight.performed += instance.OnRudderRight;
+            @RudderRight.canceled += instance.OnRudderRight;
         }
 
         private void UnregisterCallbacks(IPlayerControlsActions instance)
@@ -802,6 +854,12 @@ public partial class @PlayerAction: IInputActionCollection2, IDisposable
             @MakeNighttime.started -= instance.OnMakeNighttime;
             @MakeNighttime.performed -= instance.OnMakeNighttime;
             @MakeNighttime.canceled -= instance.OnMakeNighttime;
+            @RudderLeft.started -= instance.OnRudderLeft;
+            @RudderLeft.performed -= instance.OnRudderLeft;
+            @RudderLeft.canceled -= instance.OnRudderLeft;
+            @RudderRight.started -= instance.OnRudderRight;
+            @RudderRight.performed -= instance.OnRudderRight;
+            @RudderRight.canceled -= instance.OnRudderRight;
         }
 
         public void RemoveCallbacks(IPlayerControlsActions instance)
@@ -1031,6 +1089,8 @@ public partial class @PlayerAction: IInputActionCollection2, IDisposable
         void OnBoost(InputAction.CallbackContext context);
         void OnMakeDaytime(InputAction.CallbackContext context);
         void OnMakeNighttime(InputAction.CallbackContext context);
+        void OnRudderLeft(InputAction.CallbackContext context);
+        void OnRudderRight(InputAction.CallbackContext context);
     }
     public interface ICameraControlsActions
     {
