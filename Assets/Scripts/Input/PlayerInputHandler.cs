@@ -1,17 +1,14 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class PlayerInputHandler : MonoBehaviour
 {
-
 	public Player player;
 	public GeoGame.Quest.QuestSystem questSystem;
-	public GameCamera gameCamera;
+	[SerializeField] private GameCamera gameCamera;
 	public UIManager uIManager;
 	public SolarSystem.SolarSystemManager solarSystemManager;
-	PlayerAction playerActions;
+	public PlayerAction playerActions;
 
 
 	void Start()
@@ -64,6 +61,14 @@ public class PlayerInputHandler : MonoBehaviour
 
 	void CameraControls()
 	{
+		// Handle zoom first
+		if (playerActions.CameraControls.ZoomInView.WasPressedThisFrame())
+		{
+			ToggleZoomedView();
+			return; // Exit early to prevent other camera controls from triggering
+		}
+
+		// Handle other camera controls
 		if (playerActions.CameraControls.ForwardCameraView.WasPressedThisFrame())
 		{
 			gameCamera.SetActiveView(GameCamera.ViewMode.LookingForward);
@@ -75,6 +80,29 @@ public class PlayerInputHandler : MonoBehaviour
 		if (playerActions.CameraControls.TopCameraView.WasPressedThisFrame())
 		{
 			gameCamera.SetActiveView(GameCamera.ViewMode.TopDown);
+		}
+		if (playerActions.CameraControls.PackageView.IsPressed())
+		{
+			gameCamera.SetActiveView(GameCamera.ViewMode.LookingBehind);
+		}
+		else if (playerActions.CameraControls.PackageView.WasReleasedThisFrame())
+		{
+			gameCamera.SetActiveView(GameCamera.ViewMode.LookingForward);
+		}
+	}
+
+	void ToggleZoomedView()
+	{
+		if (gameCamera != null)
+		{
+			if (gameCamera.IsZoomed)
+			{
+				gameCamera.ResetZoom();
+			}
+			else
+			{
+				gameCamera.ZoomIn();
+			}
 		}
 	}
 

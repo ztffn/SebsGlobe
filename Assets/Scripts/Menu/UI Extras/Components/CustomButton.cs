@@ -20,6 +20,7 @@ public class CustomButton : Button
 	[Header("References")]
 	public TMPro.TMP_Text label;
 
+	public bool IsActive { get; private set; }
 
 	void SetLabel(string text)
 	{
@@ -45,5 +46,44 @@ public class CustomButton : Button
 		base.OnPointerExit(eventData);
 		SetLabel(localizer.currentValue);
 		onPointerExit?.Invoke();
+	}
+
+	public void ActivateButton()
+	{
+		if (changeTextOnMouseOver)
+		{
+			SetLabel($"<   {localizer.currentValue}   >");
+		}
+		onPointerEnter?.Invoke();
+	}
+
+	public void DeactivateButton()
+	{
+		SetLabel(localizer.currentValue);
+		onPointerExit?.Invoke();
+	}
+
+	public void NavigateToNextButton(CustomButton nextButton)
+	{
+		DeactivateButton();
+		nextButton.ActivateButton();
+	}
+
+	public void OnGamepadButtonClick()
+	{
+		// Trigger the button's click event
+		onClick.Invoke();
+	}
+
+	public void SetAsDefaultActive()
+	{
+		IsActive = true;
+		ActivateButton();
+	}
+
+	public void SetAsInactive()
+	{
+		IsActive = false;
+		DeactivateButton();
 	}
 }

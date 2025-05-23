@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.InputSystem;
 
 public class MainMenu : Menu
 {
@@ -19,6 +20,8 @@ public class MainMenu : Menu
 	public float blurRadius = 12;
 	public BlurEffect blurEffect;
 
+	private CustomButton[] buttons;
+	private int currentButtonIndex = 0;
 
 	void Start()
 	{
@@ -27,8 +30,47 @@ public class MainMenu : Menu
 		playButton.onClick.AddListener(PlayGame);
 		quitButton.onClick.AddListener(Quit);
 
+		buttons = mainButtonsHolder.GetComponentsInChildren<CustomButton>();
+		if (buttons.Length > 0)
+		{
+			buttons[0].SetAsDefaultActive();
+		}
 	}
 
+	void Update()
+	{
+		if (GameController.IsState(GameState.InMainMenu))
+		{
+			HandleGamepadInput();
+		}
+	}
+
+	void HandleGamepadInput()
+	{
+		var gamepad = Gamepad.current;
+		if (gamepad != null)
+		{
+			if (gamepad.dpad.up.wasPressedThisFrame)
+			{
+				NavigateButtons(-1);
+			}
+			else if (gamepad.dpad.down.wasPressedThisFrame)
+			{
+				NavigateButtons(1);
+			}
+			else if (gamepad.buttonSouth.wasPressedThisFrame)
+			{
+				buttons[currentButtonIndex].OnGamepadButtonClick();
+			}
+		}
+	}
+
+	void NavigateButtons(int direction)
+	{
+		buttons[currentButtonIndex].SetAsInactive();
+		currentButtonIndex = (currentButtonIndex + direction + buttons.Length) % buttons.Length;
+		buttons[currentButtonIndex].SetAsDefaultActive();
+	}
 
 	void LateUpdate()
 	{

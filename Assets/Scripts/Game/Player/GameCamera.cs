@@ -36,10 +36,16 @@ public class GameCamera : MonoBehaviour
 
 	float menuToGameViewTransitionT;
 
+	public bool IsZoomed { get; private set; }
+	private float defaultFOV;
+	private float zoomedFOV = 30f;
+	private float zoomSmoothTime = 0.5f;
+	private float zoomVelocity;
 
 	void Start()
 	{
 		InitView();
+		defaultFOV = cam.fieldOfView;
 	}
 
 	public void SetActiveView(ViewMode viewMode) {
@@ -60,10 +66,8 @@ public class GameCamera : MonoBehaviour
 		if (!GameController.IsState(GameState.Paused))
 		{
 			UpdateView();
-
-			cam.fieldOfView = Mathf.SmoothDamp(cam.fieldOfView, CalculateFOV(), ref smoothFovVelocity, fovSmoothTime);
-
-
+			float targetFOV = IsZoomed ? zoomedFOV : CalculateFOV();
+			cam.fieldOfView = Mathf.SmoothDamp(cam.fieldOfView, targetFOV, ref zoomVelocity, zoomSmoothTime);
 			gameCameraUpdateComplete?.Invoke(cam);
 		}
 	}
@@ -182,4 +186,19 @@ public class GameCamera : MonoBehaviour
 		}
 	}
 
+	public void ZoomIn()
+	{
+		if (cam != null)
+		{
+			IsZoomed = true;
+		}
+	}
+
+	public void ResetZoom()
+	{
+		if (cam != null)
+		{
+			IsZoomed = false;
+		}
+	}
 }

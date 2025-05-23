@@ -9,7 +9,7 @@
                     "name": "Drop Package",
                     "type": "Button",
                     "id": "58cca24b-43c7-47cb-9159-c64941082333",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -27,7 +27,7 @@
                     "name": "Speed",
                     "type": "Button",
                     "id": "a32814bc-f2fa-41c7-84af-d5438b026f34",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -75,7 +75,7 @@
                 {
                     "name": "",
                     "id": "4bcdae3e-9221-4050-8e56-202c21fe2abb",
-                    "path": "<Gamepad>/buttonWest",
+                    "path": "<Gamepad>/buttonSouth",
                     "interactions": "",
                     "processors": "",
                     "groups": "Gamepad",
@@ -269,7 +269,7 @@
                     "name": "Forward Camera View",
                     "type": "Button",
                     "id": "c90bfd6e-0c10-4e68-8bde-8179589f4166",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -291,6 +291,24 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "PackageView",
+                    "type": "Button",
+                    "id": "3a280045-9a6e-4e30-a534-1cf662033666",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "ZoomInView",
+                    "type": "Button",
+                    "id": "19ca7a3b-f542-4247-a246-e5872b855993",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -301,17 +319,6 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard",
-                    "action": "Top Camera View",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "8b40c71c-366e-4714-93b1-61efc127d257",
-                    "path": "<Gamepad>/dpad/down",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Gamepad",
                     "action": "Top Camera View",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -370,6 +377,28 @@
                     "action": "Forward Camera View",
                     "isComposite": false,
                     "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "bfd7f4c5-8310-4d44-9f14-c62e13334ee7",
+                    "path": "<Gamepad>/buttonWest",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Gamepad",
+                    "action": "PackageView",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "f48e608e-99e0-4e90-9c95-d2e69e98b86d",
+                    "path": "<Gamepad>/dpad/down",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ZoomInView",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         },
@@ -381,7 +410,7 @@
                     "name": "Toggle Pause",
                     "type": "Button",
                     "id": "33498dff-970c-4b6c-a767-b8c1effeb10c",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false

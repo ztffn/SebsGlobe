@@ -191,7 +191,7 @@ public class GameController : MonoBehaviour
 		{
 			if (_instance == null)
 			{
-				_instance = FindObjectOfType<GameController>(includeInactive: true);
+				_instance = FindFirstObjectByType<GameController>();
 			}
 			return _instance;
 		}
